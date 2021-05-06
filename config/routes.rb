@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  root to: 'home#index'
+
   resources :contact_errors
   resources :contact_files
   resources :contacts
