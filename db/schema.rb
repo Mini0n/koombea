@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_06_193054) do
+ActiveRecord::Schema.define(version: 2021_05_06_192306) do
 
   create_table "contact_files", force: :cascade do |t|
     t.string "name", null: false
@@ -38,21 +38,6 @@ ActiveRecord::Schema.define(version: 2021_05_06_193054) do
     t.index ["user_id"], name: "index_contacts_on_user_id"
   end
 
-  create_table "import_errors", force: :cascade do |t|
-    t.text "line", null: false
-    t.integer "line_number", null: false
-    t.text "errors", null: false
-    t.text "attempt", null: false
-    t.integer "user_id", null: false
-    t.integer "contact_file_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["contact_file_id"], name: "index_import_errors_on_contact_file_id"
-    t.index ["user_id"], name: "index_import_errors_on_user_id"
-  end
-
   add_foreign_key "contact_files", "users"
   add_foreign_key "contacts", "users"
-  add_foreign_key "import_errors", "contact_files"
-  add_foreign_key "import_errors", "users"
 end
