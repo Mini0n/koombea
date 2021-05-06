@@ -30,6 +30,8 @@ group :development, :test do
   gem "byebug", platforms: [:mri, :mingw, :x64_mingw]
   gem "rspec-rails" # Adding Rspec capabilities
   gem "awesome_print" # helps with debudding
+  gem 'factory_bot' # helps with tests
+  gem 'faker' # helps with tests
 end
 
 group :development do
