@@ -10,7 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_06_191310) do
+ActiveRecord::Schema.define(version: 2021_05_06_192306) do
+
+  create_table "contact_files", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "status", null: false
+    t.integer "lines", null: false
+    t.text "columns", null: false
+    t.integer "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_contact_files_on_user_id"
+  end
 
   create_table "contacts", force: :cascade do |t|
     t.string "name", null: false
@@ -27,5 +38,6 @@ ActiveRecord::Schema.define(version: 2021_05_06_191310) do
     t.index ["user_id"], name: "index_contacts_on_user_id"
   end
 
+  add_foreign_key "contact_files", "users"
   add_foreign_key "contacts", "users"
 end
