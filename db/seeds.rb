@@ -5,3 +5,12 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+test_user = User.new(
+  email: 'test@koombea.com',
+  password: ''
+)
+
+test_user.save!
+
+# Add sample Contacts, ContactFile & ContactErrors, or create a rake test?
