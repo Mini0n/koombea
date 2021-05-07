@@ -33,18 +33,9 @@ class ContactFilesController < ApplicationController
 
     @contact_file.csv_file.attach(upload_params[:csv_file])
 
-    # byebug
-
-    # @contact_file.name = upload_params[csv_file].original_filename
-    # @contact_file.columns = upload_params[:columns].to_s.gsub(/\r\n?/, '')
-    # @contact_file.user = current_user
-    # @contact_file.status = 'On Hold'
-    # @contact_file.lines = 1
-
-    # byebug
-
     respond_to do |format|
       if @contact_file.save
+        @contact_file.run_import
         format.html { redirect_to contact_files_path, notice: 'Contact file was successfully created.' }
         format.json { render :show, status: :created, location: @contact_file }
       else
