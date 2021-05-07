@@ -65,7 +65,7 @@ Create Contact a list by importing CSVs w/ contacts rows
 ### ⚗️ ToDo
 
 - Get an S3 Account to use Bucket Uploads (CreditCard problems)
-- Use S3 Buckets & Postgress to create Live version @ Heroku
+- Use S3 Buckets & set `pg` gem to create Live version @ Heroku
 - Tests, tests, tests
 - GUI Improvements
 - Go full API
