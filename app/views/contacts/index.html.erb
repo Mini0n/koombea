@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+<h1>Contact Files</h1>
+<%#= link_to 'New Contact File', new_contact_file_path %>
+<br>
+<br>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Card</th>
+      <th scope="col">Franchise</th>
+      <th scope="col">Birth</th>
+      <th scope="col">Phone</th>
+      <th scope="col">Email</th>
+      <th scope="col">Address</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @contacts.each do |contact| %>
+      <tr>
+        <th scope="row"><%= contact.id %></td>
+        <td><%= contact.name %></td>
+        <td><%= '***...' + contact.card_nums %></td>
+        <td><%= contact.franchise %></td>
+        <td><%= contact.birth.strftime('%Y %B %-d') %></td>
+        <td><%= contact.phone %></td>
+        <td><%= contact.email %></td>
+        <td><%= contact.address %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<br>
