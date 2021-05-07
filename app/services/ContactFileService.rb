@@ -52,7 +52,11 @@ class ContactFileService
   def start_importing
     @csv_file.each do |row|
       attrs = row_to_attributes(row)
-      valid_attributes?(attrs)
+      next unless valid_attributes?(attrs)
+
+      new_contact = Contact.new({ user: @contact_file.user }.merge(attrs))
+      new_contact.save
+      byebug
     end
 
     puts '--- DONE'
