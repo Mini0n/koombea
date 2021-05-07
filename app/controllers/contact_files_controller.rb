@@ -23,13 +23,21 @@ class ContactFilesController < ApplicationController
     upload_params = contact_file_params
 
     @contact_file = ContactFile.new
-    @contact_file.update(
-      name: @contact_file.name = upload_params[:csv_file].original_filename,
-      columns: upload_params[:columns].to_s.gsub(/\r\n?/, ''),
-      user: current_user,
-      status: 'On Hold',
-      lines: 1
-    )
+    # @contact_file.update(
+    #   name: @contact_file.name = upload_params[:csv_file].original_filename,
+    #   columns: upload_params[:columns].to_s.gsub(/\r\n?/, ''),
+    #   user: current_user,
+    #   status: 'On Hold',
+    #   lines: 1
+    # )
+
+    @contact_file.name = upload_params[:csv_file].original_filename
+    @contact_file.columns = upload_params[:columns].to_s.gsub(/\r\n?/, '')
+    @contact_file.user = current_user
+    @contact_file.status = 'On Hold'
+    @contact_file.lines = 1
+
+    byebug
 
     respond_to do |format|
       if @contact_file.save
