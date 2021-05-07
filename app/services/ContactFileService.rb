@@ -58,6 +58,7 @@ class ContactFileService
       unless valid_attributes?(attrs)
         valid_attributes_error(line_num)
         contact_error_report(line_num)
+        next
       end
 
       new_contact = Contact.new({ user: @contact_file.user }.merge(attrs))
@@ -66,14 +67,10 @@ class ContactFileService
         @imported += 1
       else
         @failed += 1
-        byebug
         @errors.merge!(new_contact.errors.messages)
         contact_error_report(line_num)
-        byebug
       end
     end
-
-    puts '--- DONE'
   end
 
   def set_status(imported, failed)
@@ -91,9 +88,10 @@ class ContactFileService
       user: @contact_file.user,
       contact_file: @contact_file
     )
-    byebug
 
     contact_error.save
+
+    @errors = {}
   end
 
   # == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == ==
@@ -112,7 +110,7 @@ class ContactFileService
   end
 
   def valid_attributes_error(line_num)
-    @errors.merge!(information: "There is invalid information at line #{line_num}")
+    @errors.merge!(information: "There is invalid information at line #{line_num.to_i + 1}")
   end
 
   def valid_attributes?(attributes)
@@ -169,9 +167,8 @@ class ContactFileService
   end
 
   def empty_values?(attributes)
-    res = attributes.values.include?(nil) || attributes.values.include?('')
-    @errors.merge!(columns: 'There are empty values') if res
-    res
+    attributes.values.include?(nil) || attributes.values.include?('')
+    # @errors.merge!(columns: 'There are empty values') if res
   end
 
   # == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == ==
