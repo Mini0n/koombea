@@ -1,0 +1,29 @@
+<h1>Contact Import Errors</h1>
+<%#= link_to 'New Contact File', new_contact_file_path %>
+<br>
+<br>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">When</th>
+      <th scope="col">Error(s)</th>
+      <th scope="col">Line #</th>
+      <th scope="col">Line</th>
+      <th scope="col">File</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @contact_errors.each do |contact_error| %>
+      <tr>
+        <th scope="row"><%= contact_error.id %></td>
+        <td><%= contact_error.attempt %></td>
+        <td><%= contact_error.import_errors %></td>
+        <td><%= contact_error.line_number %></td>
+        <td><%= contact_error.line %></td>
+        <td><%= contact_error.contact_file.name %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<br>
