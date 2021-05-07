@@ -66,7 +66,8 @@ Create Contact a list by importing CSVs w/ contacts rows
 
 - Get an S3 Account to use Bucket Uploads (CreditCard problems)
 - Use S3 Buckets & set `pg` gem to create Live version @ Heroku
-- Tests, tests, tests
+- Tests, tests, tests (I invest too much time figuring out some other parts)
+  - Please, if you will, take a look at this side-project where I implemented some beautiful testing: [github/Mini0n/quaerit](https://github.com/Mini0n/quaerit)
 - GUI Improvements
 - Go full API
 - Front End Client with a JS Framework
