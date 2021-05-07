@@ -32,9 +32,7 @@ class ContactFileService
   end
 
   def call
-    @matched_columns = match_file_columns
-    @errors.merge!(columns: "Bad column matching: #{@contact_file.columns}") if @matched_columns.nil?
-    abort_when_error
+    prepare_columns
   end
 
   # == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == ==
@@ -43,7 +41,27 @@ class ContactFileService
   # == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == ==
   # == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == ==
 
-  # def
+  # == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == ==
+  # File
+  # == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == ==
+
+  def prepase_parsing
+    csv_file = @contact_file.csv_file
+
+    return nil unless csv_file.attached?
+
+    csv_file = csv_file.download
+  end
+
+  # == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == ==
+  # Columns
+  # == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == ==
+
+  def prepare_columns
+    @matched_columns = match_file_columns
+    @errors.merge!(columns: "Bad column matching: #{@contact_file.columns}") if @matched_columns.nil?
+    abort_when_error # TODO: This needs to ContactError Handling
+  end
 
   def match_file_columns
     cols = @contact_file.columns
