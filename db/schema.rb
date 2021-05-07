@@ -36,7 +36,7 @@ ActiveRecord::Schema.define(version: 2021_05_07_004219) do
   create_table "contact_errors", force: :cascade do |t|
     t.text "line", null: false
     t.integer "line_number", null: false
-    t.text "errors", null: false
+    t.text "import_errors", null: false
     t.text "attempt", null: false
     t.integer "user_id", null: false
     t.integer "contact_file_id", null: false
