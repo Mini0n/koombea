@@ -52,9 +52,6 @@ class ContactFileService
   def start_importing
     @csv_file.each do |row|
       attrs = row_to_attributes(row)
-      # byebug
-      puts '- ' * 20
-      ap attrs
       valid_attributes?(attrs)
     end
 
@@ -73,29 +70,56 @@ class ContactFileService
     )
   end
 
+  # == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == ==
+  # Attributes Validations
+  # == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == ==
+
+  def valid_attributes_error
+    @errors.merge!(information: 'There is invalid information')
+  end
+
   def valid_attributes?(attributes)
     return false if empty_values?(attributes)
 
-    return false unless valid_name?(attributes[:name])
+    birth = valid_date?(attributes[:birth])
 
-    byebug
+    return false unless birth
 
-    return false unless valid_date?(attributes[:birth])
+    attributes[:birth] = birth
 
-    byebug
+    return false unless valid_name?(attributes[:name]) &&
+                        valid_phone?(attributes[:phone]) &&
+                        valid_email?(attributes[:email])
+
+    true
+  end
+
+  def valid_email?(email)
+    !email.to_s.match(URI::MailTo::EMAIL_REGEXP).nil?
+  end
+
+  def valid_phone?(phone)
+    phone_s = phone.to_s
+
+    format1 = phone_s.match(/(\(\+\d{2}\) \d{3} \d{3} \d{2} \d{2})/)
+    format2 = phone_s.match(/(\(\+\d{2}\) \d{3}-\d{3}-\d{2}-\d{2})/)
+
+    !(format1 || format2).nil?
   end
 
   def valid_date?(date)
-    format1 = date.to_s.match(/\d{8}/)
-    format2 = date.to_s.match(/\d{4}-\d{2}-\d{2}/)
+    date_s = date.to_s
+
+    format1 = date_s.match(/\d{8}/)
+    format2 = date_s.match(/\d{4}-\d{2}-\d{2}/)
 
     return false if (format1 || format2).nil?
 
-    parsed = begin
+    begin
       if format1
-        Date.strptime(date.to_s, '%Y%m%d')
+        Date.strptime(date_s, '%Y%m%d')
       else
-        Date.strptime(date.to_s, '%Y-%m-%d')
+        Date.strptime(date_s, '%Y-%m-%d')
       end
     rescue StandardError
       false
