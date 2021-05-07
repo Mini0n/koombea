@@ -6,7 +6,7 @@ class ContactErrorsController < ApplicationController
   def index
     @contact_errors = ContactError.all
 
-    render json: @contact_errors
+    # render json: @contact_errors
   end
 
   # GET /contact_errors/1
