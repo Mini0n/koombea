@@ -35,7 +35,7 @@ class ContactFilesController < ApplicationController
 
     respond_to do |format|
       if @contact_file.save
-        @contact_file.run_import
+        ImportJob.perform_later(@contact_file)
         format.html { redirect_to contact_files_path, notice: 'Contact file was successfully created.' }
         format.json { render :show, status: :created, location: @contact_file }
       else
