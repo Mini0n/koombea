@@ -1,4 +1,6 @@
 require 'csv'
+require 'credit_card_validations/string'
+require 'bcrypt'
 
 class ContactFileService
   # COLUMNS = {
@@ -51,13 +53,64 @@ class ContactFileService
     @csv_file.each do |row|
       attrs = row_to_attributes(row)
       # byebug
+      puts '- ' * 20
+      ap attrs
+      valid_attributes?(attrs)
     end
 
     puts '--- DONE'
   end
 
   def row_to_attributes(row)
-    @columns.each_with_object({}) { |(k, v), h| h.merge!(k => row[v]) }
+    attrs = @columns.each_with_object({}) { |(k, v), h| h.merge!(k => row[v]) }
+    card = attrs[:card].to_s
+    attrs.merge!(
+      {
+        card_nums: card[-4..-1],
+        franchise: card.credit_card_brand,
+        card: BCrypt::Password.create(card)
+      }
+    )
+  end
+
+  def valid_attributes?(attributes)
+    return false if empty_values?(attributes)
+
+    return false unless valid_name?(attributes[:name])
+
+    byebug
+
+    return false unless valid_date?(attributes[:birth])
+
+    byebug
+  end
+
+  def valid_date?(date)
+    format1 = date.to_s.match(/\d{8}/)
+    format2 = date.to_s.match(/\d{4}-\d{2}-\d{2}/)
+
+    return false if (format1 || format2).nil?
+
+    parsed = begin
+      if format1
+        Date.strptime(date.to_s, '%Y%m%d')
+      else
+        Date.strptime(date.to_s, '%Y-%m-%d')
+      end
+    rescue StandardError
+      false
+    end
+  end
+
+  # Alphanumer & Hyphen ("-") are allowed
+  def valid_name?(name)
+    name.to_s.index(/[^[:alnum:]-]/).nil?
+  end
+
+  def empty_values?(attributes)
+    res = attributes.values.include?(nil) || attributes.values.include?('')
+    @errors.merge!(columns: 'There are empty values') if res
+    res
   end
 
   # == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == ==
