@@ -1,4 +1,4 @@
-<%= sample_columns = "{\n\"name\": 0,\n\"birth\": 1,\n\"phone\": 2,\n\"address\": 3,\n\"card\": 4\n\"email\": 5\n}" %>
+<% sample_columns = "{\n\"name\": 0,\n\"birth\": 1,\n\"phone\": 2,\n\"address\": 3,\n\"card\": 4,\n\"email\": 5\n}" %>
 <%= form_with(model: contact_file, local: true) do |form| %>
   <% if contact_file.errors.any? %>
     <div id="error_explanation">

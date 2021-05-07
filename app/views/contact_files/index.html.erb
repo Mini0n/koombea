@@ -1,25 +1,31 @@
 <p id="notice"><%= notice %></p>
-
 <h1>Contact Files</h1>
-
-<table>
+<%= link_to 'New Contact File', new_contact_file_path %>
+<br>
+<br>
+<table class="table">
   <thead>
     <tr>
-      <th colspan="3"></th>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Status</th>
+      <th scope="col">Lines</th>
+      <th scope="col">Columns</th>
     </tr>
   </thead>
-
   <tbody>
     <% @contact_files.each do |contact_file| %>
       <tr>
-        <td><%= link_to 'Show', contact_file %></td>
-        <td><%= link_to 'Edit', edit_contact_file_path(contact_file) %></td>
-        <td><%= link_to 'Destroy', contact_file, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <th scope="row"><%= contact_file.id %></td>
+        <td><%= contact_file.name %></td>
+        <td><%= contact_file.status %></td>
+        <td><%= contact_file.lines %></td>
+        <td><%= contact_file.columns %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
-
 <br>
-
-<%= link_to 'New Contact File', new_contact_file_path %>
+<%# <td><%= link_to 'Show', contact_file %></td>
+<%# <td><%= link_to 'Edit', edit_contact_file_path(contact_file) %></td>
+<%# <td><%= link_to 'Destroy', contact_file, method: :delete, data: { confirm: 'Are you sure?' } %></td>
