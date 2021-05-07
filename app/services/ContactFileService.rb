@@ -33,9 +33,12 @@ class ContactFileService
 
     @contact_file = contact_file
     @errors = {}
+    @imported = 0
+    @failed = 0
   end
 
   def call
+    # byebug
     @contact_file.update_attribute(:status, 'Processing')
     prepare_columns
     prepare_importing
@@ -178,7 +181,7 @@ class ContactFileService
   def prepare_importing
     @csv_file = prepare_csv_file
     @errors.merge!(columns: 'Failed reading csv') if @csv_file.nil?
-    abort_when_error # TODO: This needs to ContactError Handling
+    abort_when_error
   end
 
   def prepare_csv_file
@@ -196,7 +199,7 @@ class ContactFileService
   def prepare_columns
     @columns = match_file_columns
     @errors.merge!(columns: "Bad column matching: #{@contact_file.columns}") if @columns.nil?
-    abort_when_error # TODO: This needs to ContactError Handling
+    abort_when_error
   end
 
   def match_file_columns
@@ -235,6 +238,10 @@ class ContactFileService
   end
 
   def abort_when_error
-    raise 'Unable to process File' unless @errors.empty?
+    unless @errors.empty?
+      contact_error_report(0)
+      @contact_file.update_attribute(:status, 'Failed')
+      raise 'Unable to process File'
+    end
   end
 end
