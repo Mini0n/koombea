@@ -1,3 +1,6 @@
 <% user_name = current_user.present? ? current_user.email : 'Stranger' %>
 <h3>Welcome, </br> <%= user_name %> </h3>
-<p>Find me in app/views/home/index.html.erb</p>
+<br>
+<%= link_to 'Show Your Contacts', contacts_path, class: 'btn btn-primary btn-lg' %>
+<%= link_to 'Import New Contacts', new_contact_file_path, class: 'btn btn-primary btn-lg' %>
+<%= link_to 'Review Import Logs', contact_errors_path, class: 'btn btn-primary btn-lg' %>
