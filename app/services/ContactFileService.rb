@@ -1,3 +1,5 @@
+require 'csv'
+
 class ContactFileService
   # COLUMNS = {
   #   name: nil,       # Needed from params
@@ -32,7 +34,11 @@ class ContactFileService
   end
 
   def call
+    @contact_file.update_attribute(:status, 'Processing')
     prepare_columns
+    prepare_importing
+    @contact_file.update_attribute(:lines, @csv_file.count)
+    start_importing
   end
 
   # == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == ==
@@ -41,16 +47,35 @@ class ContactFileService
   # == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == ==
   # == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == ==
 
+  def start_importing
+    @csv_file.each do |row|
+      attrs = row_to_attributes(row)
+      # byebug
+    end
+
+    puts '--- DONE'
+  end
+
+  def row_to_attributes(row)
+    @columns.each_with_object({}) { |(k, v), h| h.merge!(k => row[v]) }
+  end
+
   # == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == ==
   # File
   # == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == ==
 
-  def prepase_parsing
-    csv_file = @contact_file.csv_file
+  def prepare_importing
+    @csv_file = prepare_csv_file
+    @errors.merge!(columns: 'Failed reading csv') if @csv_file.nil?
+    abort_when_error # TODO: This needs to ContactError Handling
+  end
 
-    return nil unless csv_file.attached?
+  def prepare_csv_file
+    return nil unless @contact_file.csv_file.attached?
 
-    csv_file = csv_file.download
+    CSV.parse(@contact_file.csv_file.download)
+  rescue StandardError
+    nil
   end
 
   # == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == ==
@@ -58,8 +83,8 @@ class ContactFileService
   # == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == ==
 
   def prepare_columns
-    @matched_columns = match_file_columns
-    @errors.merge!(columns: "Bad column matching: #{@contact_file.columns}") if @matched_columns.nil?
+    @columns = match_file_columns
+    @errors.merge!(columns: "Bad column matching: #{@contact_file.columns}") if @columns.nil?
     abort_when_error # TODO: This needs to ContactError Handling
   end
 
