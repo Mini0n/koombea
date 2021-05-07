@@ -1,5 +1,6 @@
 class ContactFilesController < ApplicationController
-  before_action :set_contact_file, only: [:show, :update, :destroy]
+  before_action :authenticate_user!
+  before_action :set_contact_file, only: %i[show update destroy]
 
   # GET /contact_files
   def index
@@ -39,13 +40,14 @@ class ContactFilesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_contact_file
-      @contact_file = ContactFile.find(params[:id])
-    end
 
-    # Only allow a trusted parameter "white list" through.
-    def contact_file_params
-      params.require(:contact_file).permit(:name, :status, :lines, :columns, :user_id)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_contact_file
+    @contact_file = ContactFile.find(params[:id])
+  end
+
+  # Only allow a trusted parameter "white list" through.
+  def contact_file_params
+    params.require(:contact_file).permit(:name, :status, :lines, :columns, :user_id)
+  end
 end

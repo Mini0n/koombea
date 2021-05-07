@@ -1,5 +1,6 @@
 class ContactErrorsController < ApplicationController
-  before_action :set_contact_error, only: [:show, :update, :destroy]
+  before_action :authenticate_user!
+  before_action :set_contact_error, only: %i[show update destroy]
 
   # GET /contact_errors
   def index
@@ -39,13 +40,14 @@ class ContactErrorsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_contact_error
-      @contact_error = ContactError.find(params[:id])
-    end
 
-    # Only allow a trusted parameter "white list" through.
-    def contact_error_params
-      params.require(:contact_error).permit(:line, :line_number, :errors, :attempt, :user_id, :contact_file_id)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_contact_error
+    @contact_error = ContactError.find(params[:id])
+  end
+
+  # Only allow a trusted parameter "white list" through.
+  def contact_error_params
+    params.require(:contact_error).permit(:line, :line_number, :errors, :attempt, :user_id, :contact_file_id)
+  end
 end
