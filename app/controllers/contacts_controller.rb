@@ -4,7 +4,7 @@ class ContactsController < ApplicationController
 
   # GET /contacts
   def index
-    @contacts = Contact.all
+    @contacts = Contact.where(user: current_user)
 
     # render json: @contacts
   end

@@ -17,10 +17,15 @@
   <br>
   <div class="field">
     <%= form.label :columns_organization %> <br>
+    <p> Use a JSON to specify which field corresponds to which file column </p>
+    <p> Needed & valid fields are:
+      <pre>name, birth, phone, address, card, email</pre>
+    </p>
     <%= form.text_area :columns, rows: 10, cols: 40, placeholder: sample_columns, value: sample_columns %>
   </div>
   <br>
   <div class="actions">
     <%= form.submit %>
   </div>
+  <br>
 <% end %>

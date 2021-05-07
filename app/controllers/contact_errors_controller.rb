@@ -4,7 +4,7 @@ class ContactErrorsController < ApplicationController
 
   # GET /contact_errors
   def index
-    @contact_errors = ContactError.all
+    @contact_errors = ContactError.where(user: current_user)
 
     # render json: @contact_errors
   end

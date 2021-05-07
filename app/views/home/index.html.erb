@@ -1,7 +1,9 @@
 <% user_name = current_user.present? ? current_user.email : 'Stranger' %>
-<h3>Welcome, </br> <%= user_name %> </h3>
+<div>
+  <h3>Welcome, </br> <%= user_name %> </h3>
 <br>
 <%= link_to 'Show Your Contacts', contacts_path, class: 'btn btn-primary btn-lg' %>
 <%= link_to 'Show Your Imports', contact_files_path, class: 'btn btn-primary btn-lg' %>
 <%= link_to 'Make New Import', new_contact_file_path, class: 'btn btn-primary btn-lg' %>
 <%= link_to 'Review Import Logs', contact_errors_path, class: 'btn btn-primary btn-lg' %>
+</div>

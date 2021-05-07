@@ -4,7 +4,7 @@ class ContactFilesController < ApplicationController
 
   # GET /contact_files or /contact_files.json
   def index
-    @contact_files = ContactFile.all
+    @contact_files = ContactFile.where(user: current_user)
   end
 
   # GET /contact_files/1 or /contact_files/1.json
