@@ -21,6 +21,12 @@ class ContactFilesController < ApplicationController
   # POST /contact_files or /contact_files.json
   def create
     @contact_file = ContactFile.new(contact_file_params)
+    @contact_file.update(
+      name: @contact_file.name = contact_file_params[:csv_file].original_filename,
+      lines: 1,
+      status: 'On Hold',
+      user: current_user
+    )
 
     respond_to do |format|
       if @contact_file.save
@@ -64,6 +70,10 @@ class ContactFilesController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def contact_file_params
-    params.require(:contact_file).permit(:name, :status, :lines, :columns, :user_id)
+    # params.require(:contact_file).permit(:name, :status, :lines, :columns, :user_id,
+    #                                      :header_image) # Uploaded file
+
+    params.require(:contact_file).permit(:columns,
+                                         :csv_file) # Uploaded file
   end
 end

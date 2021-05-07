@@ -1,8 +1,8 @@
+<%= sample_columns = "{\n\"name\": 0,\n\"birth\": 1,\n\"phone\": 2,\n\"address\": 3,\n\"card\": 4\n\"email\": 5\n}" %>
 <%= form_with(model: contact_file, local: true) do |form| %>
   <% if contact_file.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(contact_file.errors.count, "error") %> prohibited this contact_file from being saved:</h2>
-
       <ul>
         <% contact_file.errors.full_messages.each do |message| %>
           <li><%= message %></li>
@@ -10,7 +10,16 @@
       </ul>
     </div>
   <% end %>
-
+  <div class="field">
+    <%= form.label :contacts_file %> <br>
+    <%= form.file_field :csv_file , :accept => 'text/csv' %>
+  </div>
+  <br>
+  <div class="field">
+    <%= form.label :columns_organization %> <br>
+    <%= form.text_area :columns, rows: 10, cols: 40, placeholder: sample_columns, value: sample_columns %>
+  </div>
+  <br>
   <div class="actions">
     <%= form.submit %>
   </div>
