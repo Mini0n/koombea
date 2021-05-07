@@ -20,12 +20,15 @@ class ContactFilesController < ApplicationController
 
   # POST /contact_files or /contact_files.json
   def create
-    @contact_file = ContactFile.new(contact_file_params)
+    upload_params = contact_file_params
+
+    @contact_file = ContactFile.new
     @contact_file.update(
-      name: @contact_file.name = contact_file_params[:csv_file].original_filename,
-      lines: 1,
+      name: @contact_file.name = upload_params[:csv_file].original_filename,
+      columns: upload_params[:columns].to_s.gsub(/\r\n?/, ''),
+      user: current_user,
       status: 'On Hold',
-      user: current_user
+      lines: 1
     )
 
     respond_to do |format|
