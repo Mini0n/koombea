@@ -63,7 +63,7 @@ class ContactFileService
     card = attrs[:card].to_s
     attrs.merge!(
       {
-        card_nums: card[-4..-1],
+        card_nums: card[-4..],
         franchise: card.credit_card_brand,
         card: BCrypt::Password.create(card)
       }
