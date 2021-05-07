@@ -73,6 +73,8 @@ Create Contact a list by importing CSVs w/ contacts rows
 
 ### 📸 Screenshots
 
+![screenshot](https://i.imgur.com/LGQUj7w.png)
+![screenshot](https://i.imgur.com/qMJfNGR.png)
 ![screenshot](https://i.imgur.com/EI7bEqc.png)
 ![screenshot](https://i.imgur.com/YbaUtHI.png)
 ![screenshot](https://i.imgur.com/qGxZKW3.png)
