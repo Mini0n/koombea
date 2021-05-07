@@ -221,6 +221,7 @@ PLATFORMS
 
 DEPENDENCIES
   awesome_print
+  bcrypt (~> 3.1.7)
   bootsnap (>= 1.4.2)
   byebug
   credit_card_validations
