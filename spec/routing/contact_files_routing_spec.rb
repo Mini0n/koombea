@@ -6,8 +6,16 @@ RSpec.describe ContactFilesController, type: :routing do
       expect(get: "/contact_files").to route_to("contact_files#index")
     end
 
+    it "routes to #new" do
+      expect(get: "/contact_files/new").to route_to("contact_files#new")
+    end
+
     it "routes to #show" do
       expect(get: "/contact_files/1").to route_to("contact_files#show", id: "1")
+    end
+
+    it "routes to #edit" do
+      expect(get: "/contact_files/1/edit").to route_to("contact_files#edit", id: "1")
     end
 
 

@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Contact Files</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @contact_files.each do |contact_file| %>
+      <tr>
+        <td><%= link_to 'Show', contact_file %></td>
+        <td><%= link_to 'Edit', edit_contact_file_path(contact_file) %></td>
+        <td><%= link_to 'Destroy', contact_file, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Contact File', new_contact_file_path %>
