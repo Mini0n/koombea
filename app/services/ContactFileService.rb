@@ -41,6 +41,7 @@ class ContactFileService
     prepare_importing
     @contact_file.update_attribute(:lines, @csv_file.count)
     start_importing
+    @contact_file.update_attribute(:status, set_status(@imported, @failed))
   end
 
   # == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == ==
@@ -50,18 +51,54 @@ class ContactFileService
   # == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == ==
 
   def start_importing
-    @csv_file.each do |row|
+    @imported = 0
+    @failed = 0
+    @csv_file.each_with_index do |row, line_num|
       attrs = row_to_attributes(row)
-      next unless valid_attributes?(attrs)
+      unless valid_attributes?(attrs)
+        valid_attributes_error(line_num)
+        contact_error_report(line_num)
+      end
 
       new_contact = Contact.new({ user: @contact_file.user }.merge(attrs))
-      new_contact.save
-      byebug
+      if new_contact.valid?
+        new_contact.save
+        @imported += 1
+      else
+        @failed += 1
+        byebug
+        @errors.merge!(new_contact.errors.messages)
+        contact_error_report(line_num)
+        byebug
+      end
     end
 
     puts '--- DONE'
   end
 
+  def set_status(imported, failed)
+    return 'Finished' if @csv_file.count.zero? || imported.positive?
+
+    return 'Failed' if imported.zero? || failed == @csv_file.count
+  end
+
+  def contact_error_report(line_num)
+    contact_error = ContactError.new(
+      line: @csv_file[line_num],
+      line_number: line_num + 1,
+      import_errors: @errors,
+      attempt: Time.now.to_s,
+      user: @contact_file.user,
+      contact_file: @contact_file
+    )
+    byebug
+
+    contact_error.save
+  end
+
+  # == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == ==
+  # Attributes Validations
+  # == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == ==
   def row_to_attributes(row)
     attrs = @columns.each_with_object({}) { |(k, v), h| h.merge!(k => row[v]) }
     card = attrs[:card].to_s
@@ -74,12 +111,8 @@ class ContactFileService
     )
   end
 
-  # == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == ==
-  # Attributes Validations
-  # == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == ==
-
-  def valid_attributes_error
-    @errors.merge!(information: 'There is invalid information')
+  def valid_attributes_error(line_num)
+    @errors.merge!(information: "There is invalid information at line #{line_num}")
   end
 
   def valid_attributes?(attributes)
