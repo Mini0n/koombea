@@ -28,7 +28,7 @@ class ContactFilesController < ApplicationController
       columns: upload_params[:columns].to_s.gsub(/\r\n?/, ''),
       user: current_user,
       status: 'On Hold',
-      lines: 1
+      lines: 0
     )
 
     @contact_file.csv_file.attach(upload_params[:csv_file])
